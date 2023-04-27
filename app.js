@@ -31,16 +31,22 @@ app.get('/',async(req,res)=>{
 })
 app.get('/hoop',(req,res)=>{
 
-    console.log("d");
     res.send("Dd")
 })
 
 app.get('/mangareader/:mangaName',async(req,res)=>{
   const mangaData = mangareader[req.params.mangaName]
-
-  scrapeChapterList(mangaData.link).then(result=>{
+  try {
+    mangaData.hasOwnProperty('link')
+    
+    scrapeChapterList(decodeURIComponent(mangaData.link)).then(result=>{
       res.json(result);
-  })
+    })
+  } catch (error) {
+    res.send("No Manga by that name")
+  }
+
+  
 })
 
 app.get('/mangareader/download/all/:mangaName', async (req, res) => {
