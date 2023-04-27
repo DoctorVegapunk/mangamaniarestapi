@@ -15,30 +15,9 @@ const mangareader = require('./websites/mangareader.json')
 app.use(bodyParser.json());
 
 
-app.get('/',async(req,res)=>{
-    const browser = await puppeteer.launch({
-        args: [
-          '--no-sandbox',
-          '--disable-setuid-sandbox',
-          '--disable-dev-shm-usage',
-        ],
-      });
-      const page = await browser.newPage();
-      await page.goto('https://example.com');
-      await page.screenshot({ path: 'example.png' });
-      res.send("Okey")
-      await browser.close();
-})
-app.get('/hoop',(req,res)=>{
-
-    res.send("Dd")
-})
-
 app.get('/mangareader/:mangaName',async(req,res)=>{
   const mangaData = mangareader[req.params.mangaName]
   try {
-    mangaData.hasOwnProperty('link')
-    
     scrapeChapterList(decodeURIComponent(mangaData.link)).then(result=>{
       res.json(result);
     })
